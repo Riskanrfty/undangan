@@ -1,94 +1,166 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>The Wedding of Riska & Saleh</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wedding Invitation | Riska & Saleh</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
-:root{
-    --cream:#f8f1e7;
-    --soft:#efe3d3;
-    --brown:#7c5c43;
-    --gold:#c7a97c;
-    --text:#5f4634;
-    --white:#ffffff;
+html{
+    scroll-behavior:smooth;
 }
 
 body{
     font-family:'Montserrat',sans-serif;
-    background:var(--cream);
-    color:var(--text);
     overflow-x:hidden;
-    scroll-behavior:smooth;
+    background:#f6eee3;
+    color:#6b4f3b;
+    position:relative;
 }
 
-/* BACKGROUND */
-.bg-layer{
+/* =========================
+BACKGROUND
+========================= */
+
+.background{
     position:fixed;
     inset:0;
-    z-index:-5;
+    z-index:-10;
     background:
-    linear-gradient(rgba(248,241,231,0.88),rgba(248,241,231,0.88)),
-    url('https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1974&auto=format&fit=crop');
+    linear-gradient(rgba(246,238,227,0.88), rgba(246,238,227,0.90)),
+    url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1974&auto=format&fit=crop');
     background-size:cover;
     background-position:center;
 }
 
-/* FLOWERS */
-.flower{
+/* =========================
+FLOWER LAYER 3D
+========================= */
+
+.flower-layer{
     position:fixed;
+    inset:0;
+    overflow:hidden;
     z-index:-1;
-    opacity:.55;
-    animation:floatUp 14s linear infinite;
     pointer-events:none;
 }
 
+.flower{
+    position:absolute;
+    bottom:-300px;
+    opacity:.75;
+    animation:floatFlower linear infinite;
+    filter:drop-shadow(0 10px 20px rgba(0,0,0,.15));
+}
+
+.flower img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
 .flower1{
-    left:5%;
-    width:120px;
-    bottom:-200px;
-    animation-delay:0s;
+    width:140px;
+    left:3%;
+    animation-duration:18s;
 }
 
 .flower2{
-    right:8%;
-    width:140px;
-    bottom:-250px;
+    width:180px;
+    left:18%;
+    animation-duration:22s;
     animation-delay:4s;
 }
 
 .flower3{
-    left:40%;
-    width:90px;
-    bottom:-180px;
+    width:130px;
+    right:8%;
+    animation-duration:20s;
+    animation-delay:2s;
+}
+
+.flower4{
+    width:160px;
+    right:25%;
+    animation-duration:25s;
+    animation-delay:6s;
+}
+
+.flower5{
+    width:120px;
+    left:42%;
+    animation-duration:17s;
     animation-delay:8s;
 }
 
-@keyframes floatUp{
+@keyframes floatFlower{
+
     0%{
-        transform:translateY(0) rotate(0deg);
+        transform:
+        translateY(0)
+        translateX(0)
+        rotate(0deg)
+        scale(.8);
         opacity:0;
     }
+
     10%{
-        opacity:.5;
+        opacity:.8;
     }
+
+    50%{
+        transform:
+        translateY(-50vh)
+        translateX(20px)
+        rotate(10deg)
+        scale(1);
+    }
+
     100%{
-        transform:translateY(-130vh) rotate(25deg);
+        transform:
+        translateY(-140vh)
+        translateX(-30px)
+        rotate(25deg)
+        scale(1.1);
         opacity:0;
     }
 }
 
-/* GENERAL */
+/* =========================
+MUSIC BUTTON
+========================= */
+
+.music-btn{
+    position:fixed;
+    top:20px;
+    right:20px;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,.7);
+    backdrop-filter:blur(10px);
+    font-size:1.1rem;
+    cursor:pointer;
+    z-index:999;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+/* =========================
+SECTION
+========================= */
+
 section{
     min-height:100vh;
     display:flex;
@@ -97,235 +169,242 @@ section{
     padding:40px 20px;
 }
 
-.container{
+.card{
     width:100%;
     max-width:430px;
-    background:rgba(255,255,255,0.58);
-    backdrop-filter:blur(12px);
-    border:1px solid rgba(255,255,255,.5);
-    border-radius:35px;
-    padding:40px 28px;
-    box-shadow:0 10px 40px rgba(0,0,0,.08);
+    background:rgba(255,255,255,.42);
+    backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.6);
+    border-radius:36px;
+    padding:45px 28px;
     text-align:center;
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
     position:relative;
 }
 
+/* =========================
+TYPOGRAPHY
+========================= */
+
 h1,h2,h3{
     font-family:'Cormorant Garamond',serif;
-    font-weight:600;
 }
 
-.small-text{
-    letter-spacing:4px;
+.label{
+    letter-spacing:5px;
     font-size:.72rem;
-    color:var(--brown);
-    margin-bottom:15px;
+    margin-bottom:18px;
+    color:#9c7a5b;
 }
 
-.main-title{
+.title{
     font-size:4rem;
     line-height:1;
-    color:var(--brown);
+    color:#6f523d;
 }
 
 .and{
     font-size:2rem;
+    color:#c7a06b;
     margin:5px 0;
-    color:var(--gold);
 }
 
-.subtitle{
-    margin-top:18px;
+.sub{
+    margin-top:20px;
     font-size:.95rem;
     line-height:1.8;
 }
 
-.open-btn{
+.line{
+    width:90px;
+    height:1px;
+    background:#c7a06b;
+    margin:22px auto;
+}
+
+.section-title{
+    font-size:2.6rem;
+    color:#6f523d;
+    margin-bottom:18px;
+}
+
+.desc{
+    font-size:.92rem;
+    line-height:2;
+    color:#6a5748;
+}
+
+/* =========================
+BUTTON
+========================= */
+
+.btn{
     display:inline-block;
     margin-top:35px;
     padding:15px 35px;
     border-radius:50px;
-    background:linear-gradient(135deg,var(--gold),var(--brown));
-    color:#fff;
-    text-decoration:none;
-    font-size:.85rem;
-    letter-spacing:2px;
-    transition:.3s;
-}
-
-.open-btn:hover{
-    transform:translateY(-3px);
-}
-
-/* SECTION TITLE */
-.section-title{
-    font-size:2.5rem;
-    color:var(--brown);
-    margin-bottom:15px;
-}
-
-.desc{
-    line-height:1.9;
-    font-size:.92rem;
-}
-
-/* COUPLE */
-.couple-name{
-    font-size:2.5rem;
-    color:var(--brown);
-    margin:20px 0 10px;
-}
-
-.line{
-    width:80px;
-    height:1px;
-    background:var(--gold);
-    margin:18px auto;
-}
-
-/* COUNTDOWN */
-.countdown{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    margin:30px 0;
-}
-
-.box{
-    background:rgba(255,255,255,.7);
-    border-radius:20px;
-    padding:15px 10px;
-    width:75px;
-}
-
-.box span{
-    display:block;
-    font-size:1.7rem;
-    font-weight:600;
-    color:var(--brown);
-}
-
-.box small{
-    font-size:.7rem;
-    letter-spacing:1px;
-}
-
-/* VENUE */
-.venue{
-    margin-top:20px;
-    line-height:1.8;
-    font-size:.9rem;
-}
-
-.map-btn{
-    display:inline-block;
-    margin-top:25px;
-    padding:13px 30px;
-    border-radius:50px;
-    background:var(--brown);
+    background:linear-gradient(135deg,#d8b589,#8d6848);
     color:#fff;
     text-decoration:none;
     font-size:.8rem;
     letter-spacing:2px;
+    transition:.3s;
 }
 
-/* GALLERY */
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+/* =========================
+COUPLE
+========================= */
+
+.couple-name{
+    font-size:2.4rem;
+    margin-top:18px;
+    color:#6f523d;
+}
+
+/* =========================
+COUNTDOWN
+========================= */
+
+.countdown{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin:35px 0;
+}
+
+.time-box{
+    width:75px;
+    background:rgba(255,255,255,.65);
+    border-radius:22px;
+    padding:16px 10px;
+}
+
+.time-box span{
+    display:block;
+    font-size:1.7rem;
+    font-weight:600;
+    color:#6f523d;
+}
+
+.time-box small{
+    font-size:.7rem;
+    letter-spacing:1px;
+}
+
+/* =========================
+GALLERY
+========================= */
+
 .gallery{
     margin-top:25px;
 }
 
 .gallery img{
     width:100%;
-    height:420px;
+    height:450px;
     object-fit:cover;
-    border-radius:25px;
+    border-radius:26px;
 }
 
-/* FORM */
+/* =========================
+FORM
+========================= */
+
 .form{
     margin-top:30px;
     display:flex;
     flex-direction:column;
-    gap:15px;
+    gap:16px;
 }
 
 .form input,
 .form textarea,
 .form select{
     width:100%;
-    padding:15px;
     border:none;
-    border-radius:16px;
     background:rgba(255,255,255,.75);
-    font-family:inherit;
+    border-radius:18px;
+    padding:16px;
     outline:none;
+    font-family:inherit;
 }
 
 .form textarea{
-    height:120px;
+    height:130px;
     resize:none;
 }
 
 .submit-btn{
-    padding:16px;
     border:none;
-    border-radius:16px;
-    background:linear-gradient(135deg,var(--gold),var(--brown));
+    padding:16px;
+    border-radius:18px;
+    background:linear-gradient(135deg,#d8b589,#8d6848);
     color:#fff;
     letter-spacing:2px;
     cursor:pointer;
 }
 
-/* MUSIC */
-.music-btn{
-    position:fixed;
-    top:20px;
-    right:20px;
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    border:none;
-    background:rgba(255,255,255,.8);
-    backdrop-filter:blur(10px);
-    font-size:1.1rem;
-    cursor:pointer;
-    z-index:999;
-}
+/* =========================
+MOBILE
+========================= */
 
-/* MOBILE */
 @media(max-width:480px){
 
-    .main-title{
+    .title{
         font-size:3.2rem;
     }
 
-    .container{
-        padding:35px 22px;
+    .section-title{
+        font-size:2.1rem;
     }
 
     .gallery img{
         height:330px;
     }
 
-    .countdown{
-        gap:8px;
+    .card{
+        padding:38px 22px;
     }
 
-    .box{
-        width:68px;
-    }
 }
+
 </style>
 </head>
 
 <body>
 
-<div class="bg-layer"></div>
+<div class="background"></div>
 
-<img class="flower flower1" src="https://pngimg.com/d/flowers_PNG102.png">
-<img class="flower flower2" src="https://pngimg.com/d/flowers_PNG102.png">
-<img class="flower flower3" src="https://pngimg.com/d/flowers_PNG102.png">
+<!-- FLOWER ANIMATION -->
+<div class="flower-layer">
 
+<div class="flower flower1">
+<img src="https://pngimg.com/d/flowers_PNG102.png">
+</div>
+
+<div class="flower flower2">
+<img src="https://pngimg.com/d/flowers_PNG102.png">
+</div>
+
+<div class="flower flower3">
+<img src="https://pngimg.com/d/flowers_PNG102.png">
+</div>
+
+<div class="flower flower4">
+<img src="https://pngimg.com/d/flowers_PNG102.png">
+</div>
+
+<div class="flower flower5">
+<img src="https://pngimg.com/d/flowers_PNG102.png">
+</div>
+
+</div>
+
+<!-- MUSIC -->
 <button class="music-btn" onclick="toggleMusic()">🎵</button>
 
 <audio id="music" loop>
@@ -334,47 +413,48 @@ h1,h2,h3{
 
 <!-- HERO -->
 <section>
-<div class="container">
 
-<div class="small-text">
+<div class="card">
+
+<div class="label">
 WEDDING INVITATION
 </div>
 
-<h1 class="main-title">
+<h1 class="title">
 Riska
 </h1>
 
-<div class="and">
-&
-</div>
+<div class="and">&</div>
 
-<h1 class="main-title">
+<h1 class="title">
 Saleh
 </h1>
 
 <div class="line"></div>
 
-<p class="subtitle">
+<p class="sub">
 Wilujeng Sumping & Sila Khair
 </p>
 
-<a href="#couple" class="open-btn">
+<a href="#couple" class="btn">
 OPEN INVITATION
 </a>
 
 </div>
+
 </section>
 
 <!-- COUPLE -->
 <section id="couple">
-<div class="container">
+
+<div class="card">
 
 <h2 class="section-title">
 The Wedding
 </h2>
 
 <p class="desc">
-Dengan memohon rahmat Allah SWT, kami mengharap kehadiran Bapak/Ibu pada perayaan pernikahan kami:
+Dengan memohon rahmat Allah SWT, kami mengharap kehadiran Bapak/Ibu pada perayaan pernikahan kami.
 </p>
 
 <div class="line"></div>
@@ -383,28 +463,28 @@ Dengan memohon rahmat Allah SWT, kami mengharap kehadiran Bapak/Ibu pada perayaa
 Riska Nur Fitriyani
 </h2>
 
-<p>
-Putri dari Keluarga Sunda
+<p class="sub">
+Putri dari keluarga Sunda
 </p>
 
-<div class="and">
-&
-</div>
+<div class="and">&</div>
 
 <h2 class="couple-name">
 Muhammad Saleh
 </h2>
 
-<p>
-Putra dari Keluarga Sasak Lombok
+<p class="sub">
+Putra dari keluarga Sasak Lombok
 </p>
 
 </div>
+
 </section>
 
 <!-- STORY -->
 <section>
-<div class="container">
+
+<div class="card">
 
 <h2 class="section-title">
 The Journey
@@ -413,17 +493,21 @@ The Journey
 <p class="desc">
 Pertemuan Riska Nur Fitriyani dan Muhammad Saleh bermula dari dua latar budaya yang berbeda namun menyatu dalam satu harmoni ikatan suci.
 <br><br>
-Dipertemukan dalam sebuah ruang kolaborasi, keanggunan, kelembutan tradisi Parahyangan Sunda yang melekat pada Riska berpadu indah dengan keteguhan prinsip dan kehangatan budaya Sasak Lombok yang dijaga erat oleh Saleh.
+Dipertemukan dalam sebuah ruang kolaborasi, keanggunan dan kelembutan tradisi Parahyangan Sunda yang melekat pada Riska berpadu indah dengan keteguhan prinsip serta kehangatan budaya Sasak Lombok yang dijaga erat oleh Saleh.
 <br><br>
-Saling melengkapi dan menyelaraskan langkah, kami menyadari bahwa jalinan kasih ini selayaknya kain tenun yang dirajut perlahan dengan penuh cinta, menghadirkan kisah baru yang utuh, hangat, dan penuh berkah.
+Seiring berjalannya waktu, perbedaan bukan lagi menjadi jarak, melainkan pelengkap dalam setiap langkah perjalanan mereka. Tawa, doa, dan harapan dirangkai menjadi satu kisah yang sederhana namun penuh makna.
+<br><br>
+Bagi mereka, cinta bukan hanya tentang menemukan seseorang untuk dicintai, tetapi tentang menemukan rumah dalam satu sama lain.
 </p>
 
 </div>
+
 </section>
 
 <!-- DATE -->
 <section>
-<div class="container">
+
+<div class="card">
 
 <h2 class="section-title">
 Save The Date
@@ -431,22 +515,22 @@ Save The Date
 
 <div class="countdown">
 
-<div class="box">
+<div class="time-box">
 <span id="days">00</span>
 <small>DAYS</small>
 </div>
 
-<div class="box">
+<div class="time-box">
 <span id="hours">00</span>
 <small>HOURS</small>
 </div>
 
-<div class="box">
+<div class="time-box">
 <span id="minutes">00</span>
 <small>MINS</small>
 </div>
 
-<div class="box">
+<div class="time-box">
 <span id="seconds">00</span>
 <small>SECS</small>
 </div>
@@ -458,27 +542,31 @@ Rabu, 2 Agustus 2028
 <br><br>
 Akad Nikah : 09.00 WIB
 <br>
-Resepsi Adat : 11.00 WIB - Selesai
+Resepsi : 11.00 WIB - Selesai
 </p>
 
-<div class="venue">
+<div class="line"></div>
+
+<p class="desc">
 Grand Ballroom BSD City
 <br>
 Jl. Grand Boulevard No.1 BSD Raya Utama
 <br>
 Tangerang Selatan, Banten
-</div>
+</p>
 
-<a href="#" class="map-btn">
+<a href="#" class="btn">
 VIEW DIRECTION
 </a>
 
 </div>
+
 </section>
 
 <!-- GALLERY -->
 <section>
-<div class="container">
+
+<div class="card">
 
 <h2 class="section-title">
 Our Moments
@@ -489,11 +577,13 @@ Our Moments
 </div>
 
 </div>
+
 </section>
 
 <!-- RSVP -->
 <section>
-<div class="container">
+
+<div class="card">
 
 <h2 class="section-title">
 RSVP & Wishes
@@ -511,46 +601,53 @@ RSVP & Wishes
 
 <textarea placeholder="Tuliskan doa & ucapan..."></textarea>
 
-<button class="submit-btn">
+<button type="submit" class="submit-btn">
 KIRIM KONFIRMASI
 </button>
 
 </form>
 
 </div>
+
 </section>
 
 <script>
-const targetDate = new Date("August 2, 2028 09:00:00").getTime();
 
-setInterval(() => {
+/* MUSIC */
 
-const now = new Date().getTime();
-const distance = targetDate - now;
-
-const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-document.getElementById("days").innerHTML = days;
-document.getElementById("hours").innerHTML = hours;
-document.getElementById("minutes").innerHTML = minutes;
-document.getElementById("seconds").innerHTML = seconds;
-
-},1000);
-
-const music = document.getElementById("music");
+const music = document.getElementById('music');
 
 function toggleMusic(){
 
-if(music.paused){
-    music.play();
-}else{
-    music.pause();
-}
+    if(music.paused){
+        music.play();
+    }else{
+        music.pause();
+    }
 
 }
+
+/* COUNTDOWN */
+
+const targetDate = new Date("August 2, 2028 09:00:00").getTime();
+
+setInterval(function(){
+
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("days").innerHTML = days;
+    document.getElementById("hours").innerHTML = hours;
+    document.getElementById("minutes").innerHTML = minutes;
+    document.getElementById("seconds").innerHTML = seconds;
+
+},1000);
+
 </script>
 
 </body>
