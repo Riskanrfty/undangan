@@ -1,0 +1,595 @@
+<?php
+// Mengambil nama tamu dari parameter URL (?to=Nama+Tamu)
+$namaTamu = isset($_GET['to']) ? htmlspecialchars($_GET['to']) : "Tamu Undangan";
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Wedding of Riska & Saleh</title>
+    
+    <!-- IMPORT GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* TEMA BARU: 3D BLUE GRADIENT & CRISP WHITE */
+            --primary: #1e3a8a; /* Deep Royal Blue */
+            --secondary: #3b82f6; /* Premium Blue */
+            --accent: #60a5fa; /* Soft Sky Blue */
+            --bg-gradient: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #dbeafe 100%);
+            --glass: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            
+            /* Efek Kedalaman 3D */
+            --shadow-3d: 0 20px 40px rgba(30, 58, 138, 0.12), 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 30px 60px rgba(30, 58, 138, 0.18);
+            --shadow-inset: inset 0 2px 4px rgba(255,255,255,0.9);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--bg-gradient);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, h3, .serif-font {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- LIGHT AMBIENT ORBS (TEMA BIRU) --- */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; overflow: hidden;
+        }
+        .glow-orb {
+            position: absolute;
+            background: radial-gradient(circle, rgba(191,219,254,0.7) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: floating 25s infinite ease-in-out;
+        }
+        .orb-1 { width: 550px; height: 550px; top: -150px; left: -100px; }
+        .orb-2 { width: 650px; height: 650px; bottom: -200px; right: -150px; animation-delay: -7s; }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-40px) scale(1.05); }
+        }
+
+        /* --- AUDIO CONTROLLER --- */
+        .music-control {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: var(--primary);
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 25px rgba(30,58,138,0.15);
+        }
+        .music-control.playing {
+            border-color: var(--secondary);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+
+        /* --- SECTION LAYOUT --- */
+        section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .section-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px 30px;
+            border-radius: 32px;
+            text-align: center;
+            box-shadow: var(--shadow-3d);
+        }
+
+        /* --- HERO DEPAN (FLIP CARD 3D BARU) --- */
+        .hero-section {
+            padding: 20px;
+            perspective: 1200px;
+        }
+        
+        .card-3d {
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .card-3d.open { transform: rotateY(-180deg); }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%; height: 100%;
+            backface-visibility: hidden;
+            border-radius: 32px;
+            padding: 50px 30px;
+            display: flex; flex-direction: column;
+            justify-content: space-between; align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: var(--shadow-inset);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(219,234,254,0.65));
+            box-shadow: var(--shadow-card);
+        }
+
+        .line-divider {
+            width: 50px; height: 1.5px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            margin: 0 auto;
+        }
+
+        .main-title {
+            font-size: 3.2rem;
+            font-weight: 500;
+            color: var(--primary);
+            line-height: 1.2;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(30, 58, 138, 0.08);
+        }
+
+        .guest-box {
+            width: 100%;
+            border-top: 1px solid rgba(30,58,138,0.1);
+            padding-top: 25px;
+        }
+        .guest-box span { font-size: 0.7rem; letter-spacing: 3px; color: var(--text-muted); display: block; margin-bottom: 8px;}
+        .guest-box h3 { font-size: 1.4rem; font-weight: 500; color: var(--primary); }
+
+        .hint-text {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            color: var(--secondary);
+            text-transform: uppercase;
+            animation: subtleBounce 2s infinite ease-in-out;
+            font-weight: 600;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(191,219,254,0.65));
+            transform: rotateY(180deg);
+            box-shadow: var(--shadow-card);
+        }
+        .card-back h2 { font-size: 1.8rem; font-weight: 500; color: var(--primary); }
+        .bride-groom { font-size: 2.2rem; font-weight: 500; color: var(--primary); margin: 10px 0; text-align: center; }
+
+        /* --- DETAILS SECTION --- */
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+
+        .story-text {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: var(--text-main);
+            text-align: justify;
+            font-weight: 400;
+        }
+
+        /* --- COUNTDOWN (3D GLASS BARU) --- */
+        .countdown-container { display: flex; justify-content: center; gap: 12px; margin: 30px 0; }
+        .time-card { 
+            background: rgba(255,255,255,0.8);
+            border: 1px solid var(--glass-border);
+            padding: 15px 10px; 
+            border-radius: 18px; 
+            flex: 1;
+            max-width: 80px;
+            box-shadow: 0 10px 20px rgba(30,58,138,0.06);
+        }
+        .time-card span { display: block; font-size: 1.7rem; font-weight: 500; color: var(--primary); }
+        .time-card label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; display: block; font-weight: 500; }
+
+        /* --- BUTTONS --- */
+        .btn-maps { 
+            display: inline-block; 
+            margin-top: 25px; 
+            padding: 14px 35px; 
+            background: linear-gradient(135deg, var(--secondary), var(--primary)); 
+            color: #fff; 
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none; 
+            border: none;
+            border-radius: 50px;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 20px rgba(30, 58, 138, 0.2);
+        }
+        .btn-maps:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(30, 58, 138, 0.3); }
+
+        /* --- GALLERY GRID (DIUBAH KE 2 KOLOM SEJAJAR DAN LEBIH TINGGI) --- */
+        /* GALLERY SATU FOTO */
+.gallery-single{
+    width:100%;
+    margin-top:25px;
+}
+
+.gallery-single img{
+    width:100%;
+    height:450px;
+    object-fit:cover;
+    display:block;
+    border-radius:22px;
+    border:1px solid var(--glass-border);
+    box-shadow:0 8px 16px rgba(30,58,138,0.08);
+    transition:0.4s;
+}
+
+.gallery-single img:hover{
+    transform:scale(1.02);
+}
+
+@media (max-width:480px){
+    .gallery-single img{
+        height:320px;
+    }
+}
+
+.gallery-item img:hover{
+    transform:scale(1.05);
+}
+        .rsvp-form { display: flex; flex-direction: column; gap: 20px; text-align: left; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+
+        .rsvp-form input, .rsvp-form select, .rsvp-form textarea {
+            width: 100%; 
+            padding: 14px 18px; 
+            border: 1px solid var(--glass-border); 
+            background: rgba(255,255,255,0.8); 
+            font-size: 0.9rem; 
+            color: var(--text-main);
+            border-radius: 14px;
+            outline: none;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(30,58,138,0.03);
+        }
+        .rsvp-form input:focus, .rsvp-form select:focus, .rsvp-form textarea:focus {
+            border-color: var(--secondary);
+            background: #fff;
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: #fff; 
+            border: none; 
+            padding: 16px; 
+            font-size: 0.9rem;
+            font-weight: 600; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 14px;
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(30,58,138,0.2);
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(30,58,138,0.3); }
+
+        /* --- FEED COMMENTS --- */
+        .comments-display {
+            margin-top: 35px;
+            text-align: left;
+            max-height: 280px;
+            overflow-y: auto;
+            border-top: 1px solid rgba(30,58,138,0.1);
+            padding-top: 25px;
+        }
+        .comment-item {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid var(--glass-border);
+            padding: 15px 18px;
+            margin-bottom: 15px;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(30,58,138,0.02);
+        }
+        .comment-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .comment-name { font-weight: 600; color: var(--primary); font-size: 0.9rem; }
+        .comment-badge { font-size: 0.65rem; padding: 4px 12px; border-radius: 30px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+        .badge-hadir { background: rgba(59,130,246,0.1); color: var(--primary); border: 1px solid rgba(59,130,246,0.2); }
+        .badge-absen { background: rgba(239,68,68,0.08); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+        .comment-text { font-size: 0.85rem; color: #334155; line-height: 1.6; font-style: italic; }
+
+        @keyframes subtleBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+        /* --- MOBILE OPTIMIZATION --- */
+        @media (max-width: 480px) {
+            section { padding: 30px 15px; }
+            .section-container { padding: 35px 20px; border-radius: 24px; }
+            .main-title { font-size: 2.6rem; }
+            .bride-groom { font-size: 1.9rem; }
+            .section-title { font-size: 1.8rem; }
+            .card-3d { height: 550px; }
+            .gallery-item { height: 200px; } /* Penyesuaian tinggi di layar HP */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LIGHT AMBIENT BACKGROUND -->
+    <div class="ambient-bg">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <!-- FLOATING AUDIO CONTROLLER -->
+    <button class="music-control" id="musicBtn" onclick="toggleMusic(event)">🎵</button>
+    <audio id="bgMusic" loop>
+        <source src="aku_memilihmu.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- COVER DEPAN -->
+    <section class="hero-section">
+        <div class="card-3d" id="weddingCard">
+            <div class="card-front">
+                <div class="line-divider"></div>
+                <div>
+                    <p style="text-align: center; letter-spacing: 5px; font-size: 0.65rem; color: var(--text-muted); font-weight: 600; margin-bottom: 15px;">WEDDING INVITATION</p>
+                    <h1 class="main-title">Riska<br>&<br>Saleh</h1>
+                    <p style="text-align: center; font-size: 0.85rem; font-style: italic; color: var(--text-muted); margin-top: 15px;">Wilujeng Sumping & Sila Khair</p>
+                </div>
+                <div class="guest-box">
+                    <span>DEAR OUR GUEST:</span>
+                    <h3 id="txtNamaTamu"><?php echo $namaTamu; ?></h3>
+                </div>
+                <p class="hint-text">Open Invitation ✉</p>
+            </div>
+
+            <div class="card-back">
+                <h2>The Wedding</h2>
+                <p style="font-size: 0.85rem; line-height: 1.8; color: var(--text-muted); padding: 0 10px;">Dengan memohon rahmat Allah SWT, kami mengharap kehadiran Bapak/Ibu pada perayaan pernikahan kami:</p>
+                <div>
+                    <h3 class="bride-groom">Riska Nur Fitriyani</h3>
+                    <div class="line-divider" style="margin: 15px auto; width: 25px;"></div>
+                    <h3 class="bride-groom">Muhammad Saleh</h3>
+                </div>
+                <p class="hint-text" style="color: var(--text-muted);">Scroll Down 👇</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: JOURNEY -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title">The Journey</h2>
+            <p class="story-text">
+                Pertemuan Riska Nur Fitriyani dan Muhammad Saleh bermula dari dua latar budaya yang berbeda namun menyatu dalam satu harmoni ikatan suci. Dipertemukan dalam sebuah ruang kolaborasi, keanggunan, keluhuran, serta kelembutan tradisi Parahyangan Sunda yang melekat pada Riska berpadu indah dengan keteguhan prinsip, keberanian, dan keelokan budaya tanah Sasak Lombok yang dijaga erat oleh Saleh. Saling melengkapi dan menyelaraskan langkah, kami menyadari bahwa jalinan kasih ini selayaknya pesona kain tenun ikat Sasak yang ditenun bersama keindahan gemulai mahkota Sunda, merajut cerita baru yang utuh, abadi, dan penuh berkah.
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 3: DATE & VENUE -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title">Save The Date</h2>
+            <div class="countdown-container">
+                <div class="time-card"><span id="days">00</span><label>Days</label></div>
+                <div class="time-card"><span id="hours">00</span><label>Hours</label></div>
+                <div class="time-card"><span id="minutes">00</span><label>Mins</label></div>
+                <div class="time-card"><span id="seconds">00</span><label>Secs</label></div>
+            </div>
+            
+            <p style="line-height: 1.8; font-size: 1.1rem; color: var(--primary); font-weight: 500; margin-top: 20px;">
+                <span class="serif-font" style="font-size: 1.4rem; color: var(--secondary); display: block; margin-bottom: 5px;">Rabu, 2 Agustus 2028</span>
+                Akad Nikah: 09.00 WIB<br>
+                Resepsi Adat: 11.00 WIB - Selesai
+            </p>
+            
+            <div style="border-top: 1px solid rgba(30,58,138,0.1); margin: 25px 0;"></div>
+            
+            <p style="font-size: 0.75rem; color: var(--secondary); font-weight: 600; margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase;">Venue:</p>
+            <p style="line-height: 1.7; color: var(--text-muted); font-size: 0.9rem;">
+                <strong style="color: var(--primary); font-weight: 600;">Grand Ballroom BSD City</strong><br>
+                Jl. Grand Boulevard No. 1, Blok BSD Raya Utama,<br>
+                Bumi Serpong Damai (BSD), Tangerang Selatan, Banten.
+            </p>
+            <a href="https://maps.google.com" target="_blank" class="btn-maps">View Direction</a>
+        </div>
+    </section>
+
+    <!-- SECTION 4: GALLERY (SEKARANG HANYA 2 FOTO UKURAN DISESUAIKAN) -->
+    <!-- SECTION 4: GALLERY -->
+<!-- SECTION 4: GALLERY -->
+<!-- SECTION 4: GALLERY -->
+<section>
+    <div class="section-container">
+        <h2 class="section-title">Our Moments</h2>
+
+        <div class="gallery-single">
+            <img src="5cd400ba3aac05d9db23a0c4689253ae.jpg" alt="Our Moments">
+        </div>
+
+    </div>
+</section>
+    
+
+    <!-- SECTION 5: RSVP SYSTEM -->
+    <section>
+        <div class="section-container">
+            <h2 class="section-title">RSVP & Wishes</h2>
+            
+            <div id="notifSukses" style="display: none; background: rgba(59,130,246,0.06); border: 1px solid var(--accent); color: var(--primary); padding: 14px; margin-bottom: 20px; border-radius: 12px; font-weight: 500; font-size: 0.85rem;">
+                ✓ Doa restu dan kehadiran Anda telah terkonfirmasi.
+            </div>
+
+            <form class="rsvp-form" id="rsvpForm" onsubmit="simpanUcapan(event)">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="inputNama" value="<?php echo $namaTamu !== 'Tamu Undangan' ? $namaTamu : ''; ?>" placeholder="Budi Santoso" required>
+                </div>
+                <div class="form-group">
+                    <label>Konfirmasi Kehadiran</label>
+                    <select id="inputStatus" required>
+                        <option value="">Pilih Kehadiran</option>
+                        <option value="Hadir">Akan Hadir</option>
+                        <option value="Tidak Hadir">Berhalangan</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Ucapan & Doa Restu</label>
+                    <textarea id="inputUcapan" rows="4" placeholder="Tuliskan doa tulus Anda..." required></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Kirim Konfirmasi</button>
+            </form>
+
+            <div class="comments-display">
+                <p style="font-weight: 600; margin-bottom: 15px; color: var(--primary); font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;" id="labelJumlahUcapan">
+                    Wishes (0)
+                </p>
+                <div id="boxDaftarUcapan"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let isPlaying = false;
+        const music = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+
+        const card = document.getElementById('weddingCard');
+        card.addEventListener('click', () => {
+            card.classList.toggle('open');
+            if (!isPlaying) { playLocalAudio(); }
+        });
+
+        function toggleMusic(event) {
+            event.stopPropagation();
+            if (!isPlaying) {
+                playLocalAudio();
+            } else {
+                music.pause();
+                musicBtn.innerText = "🔇";
+                musicBtn.classList.remove('playing');
+                isPlaying = false;
+            }
+        }
+
+        function playLocalAudio() {
+            music.play().then(() => {
+                musicBtn.innerText = "🎵";
+                musicBtn.classList.add('playing');
+                isPlaying = true;
+            }).catch(() => {
+                console.log("Interaction required for audio play.");
+            });
+        }
+
+        const targetDate = new Date("August 2, 2028 09:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff > 0) {
+                document.getElementById('days').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                document.getElementById('hours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                document.getElementById('minutes').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                document.getElementById('seconds').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+            }
+        }, 1000);
+
+        function renderUcapan() {
+            const boxUcapan = document.getElementById('boxDaftarUcapan');
+            const labelJumlah = document.getElementById('labelJumlahUcapan');
+            let listData = JSON.parse(localStorage.getItem('undangan_rsvp')) || [];
+            
+            labelJumlah.innerText = `Wishes (${listData.length})`;
+            boxUcapan.innerHTML = "";
+
+            if(listData.length > 0) {
+                listData.slice().reverse().forEach(data => {
+                    const badgeClass = data.status === 'Hadir' ? 'badge-hadir' : 'badge-absen';
+                    boxUcapan.innerHTML += `
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <span class="comment-name">${escapeHTML(data.nama)}</span>
+                                <span class="comment-badge ${badgeClass}">${escapeHTML(data.status)}</span>
+                            </div>
+                            <p class="comment-text">"${escapeHTML(data.ucapan)}"</p>
+                        </div>
+                    `;
+                });
+            } else {
+                boxUcapan.innerHTML = `<p style="font-size: 0.8rem; color: var(--text-muted); text-align: center; font-style: italic; padding: 15px 0;">Belum ada ungkapan doa.</p>`;
+            }
+        }
+
+        function simpanUcapan(event) {
+            event.preventDefault();
+            const nama = document.getElementById('inputNama').value;
+            const status = document.getElementById('inputStatus').value;
+            const ucapan = document.getElementById('inputUcapan').value;
+
+            let listData = JSON.parse(localStorage.getItem('undangan_rsvp')) || [];
+            listData.push({ nama, status, ucapan });
+            localStorage.setItem('undangan_rsvp', JSON.stringify(listData));
+
+            document.getElementById('inputUcapan').value = "";
+            document.getElementById('notifSukses').style.display = "block";
+            
+            setTimeout(() => { document.getElementById('notifSukses').style.display = "none"; }, 4000);
+            renderUcapan();
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, t => ({ '&': '&', '<': '<', '>': '>', "'": ''', '"': '"' }[t] || t));
+        }
+
+        renderUcapan();
+    </script>
+</body>
+</html>
